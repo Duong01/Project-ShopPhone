@@ -23,8 +23,8 @@
           <div class="price">Price: {{ Number(item.promotionPrice).toLocaleString() }}đ</div>
           <div>SoldCount: {{ item.soldCount }}</div>
           <div class="action">
-            <router-link to="">
-              <button class="add-cart" @click="openDialog(item)">
+            <router-link :to="{name: 'AddCart',params: {id: item.id}}">
+              <button class="add-cart">
                 Add Cart
               </button>
             </router-link>
@@ -38,7 +38,7 @@
         </div>
       </div>
     </li>
-    <transition name="fade">
+    <!-- <transition name="fade">
       <div class="dialog-wrapper" v-show="wrapperVisible">
         <transition name="scale">
           <div v-if="dialogVisible" class="dialog">
@@ -88,7 +88,7 @@
           </div>
         </transition>
       </div>
-    </transition>
+    </transition> -->
   </div>
 </template>
 

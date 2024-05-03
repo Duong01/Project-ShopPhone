@@ -1,21 +1,23 @@
 <template>
-  <div
-    class="container"
-    style="grid-template-columns: auto auto auto auto auto !important"
-    v-loading="this.$store.state.isLoading"
-  >
-    <li class="sanpham" v-for="item in products" :key="item.id">
+   <div class="container" v-loading="this.$store.state.isLoading">
+  <div class="row">
+    <div
+      class="col-md-3 mb-4"
+      v-for="item in products"
+      :key="item.id"
+    >
       <div class="card">
         <router-link :to="{ name: 'ProductDetail', params: { id: item.id } }">
-          <el-badge value="Mới ra mắt" class="item" style="font-size: 20px">
+          <el-badge value="hot" class="item" style="font-size: 20px">
             <div class="imgBx">
               <img
-                style="width: 200px; height: 200px"
+                class="card-img-top"
                 :src="`http://localhost:8085/Files/${item.image}`"
+                alt="Product Image"
               />
             </div>
           </el-badge>
-          <div class="content">
+          <div class="card-body">
             <div class="productName">
               <a style="font-size: 14px" class="card-title">
                 <b>{{ item.name }}</b></a
@@ -27,10 +29,9 @@
               >
               <span>{{ Number(item.originalPrice).toLocaleString() }}đ</span>
             </div>
-
             <div class="rate">
               <el-rate
-                v-model="value"
+                v-model="item.status"
                 disabled
                 size="small"
                 show-score
@@ -40,21 +41,17 @@
             </div>
           </div>
         </router-link>
-        <div class="action">
-          <router-link :to="{name: 'AddCart',params: {id: item.id}}">
+        <router-link :to="{name: 'AddCart',params: {id: item.id}}">
           <div class="action">
               <button class="add-cart">+</button>
             
             <span class="tooltiptext"> Add cart </span>
           </div>
         </router-link>
-        </div>
       </div>
-    </li>
-
-
-    
+    </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -97,10 +94,10 @@ export default {
   methods: {
     getAll() {
       axios
-        .get("http://localhost:8181/api/products/listproducthot?status=3")
+        .get("http://localhost:8181/api/products/listproducthot?status=4")
         .then((res) => {
           if (res.data != null) {
-            this.products = res.data.slice(0, 10);
+            this.products = res.data.slice(0, 8);
             this.$store.state.isLoading = false;
           } else {
             res.data = "Không có sản phẩm nào";
@@ -158,6 +155,29 @@ export default {
 </script>
 
 <style scoped>
+
+.xemTatCa {
+    display: flex;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 auto;
+    padding: .5em 1em;
+    border-radius: 1em;
+    color: #888;
+    background-color: #eee;
+    transition-duration: .2s;
+    transform: translateY(1em);
+    border-left: 2px solid #42bcf4;
+    border-right: 2px solid #42bcf4;
+}
+.xemTatCa:hover {
+    background-color: #ccc;
+    color: #000;
+}
+a{
+    text-decoration: none;
+    color: #222;
+}
 li {
   width: 223px;
   /* height: 310px; */
@@ -172,9 +192,9 @@ li a {
   position: relative;
   width: 100%;
   max-width: 1200px;
-  display: grid;
+  /* display: grid;
   grid-template-columns: auto auto auto auto auto !important ;
-  grid-gap: 20px;
+  grid-gap: 20px; */
   padding: 30px;
   z-index: 0;
   margin: auto;
@@ -214,7 +234,7 @@ li a {
 }
 
 .container .card .imgBx:hover {
-  transition: 0.5s;
+  transition: 0.7s;
   transform: scale(1.1);
 }
 
@@ -233,21 +253,21 @@ li a {
   /* margin-top:10px; */
 }
 
-.container .card .content .price {
+.container .card .price {
   /* text-align: center; */
   margin: 10px;
   font-size: 14px;
   float: left;
 }
-.container .card .content .price span {
+.container .card .price span {
   margin: 10px;
   color: #000;
   text-decoration: line-through;
 }
-.container .card .content .price strong {
+.container .card .price strong {
   color: red;
 }
-.container .card .content .original-price {
+.container .card .original-price {
   color: darkred;
   text-align: center;
   margin-right: 10px;
@@ -380,27 +400,27 @@ button.add-cart {
   transition: opacity 0.5s;
 }
 /* @keyframes scale-in-tr {
-      0% {
-        -webkit-transform: scale(0);
-        transform: scale(0);
-        -webkit-transform-origin: 100% 0;
-        transform-origin: 100% 0;
-        opacity: 1;
-        position: absolute;
-        top: 36px;
-        left: calc(100% - 82px - 1155px);
-      }
-      100% {
-        -webkit-transform: scale(1);
-        transform: scale(1);
-        -webkit-transform-origin: 100% 0;
-        transform-origin: 100% 0;
-        opacity: 1;
-        position: absolute;
-        top: 100px;
-        left: calc(50% - 577.5px);
-      }
-    } */
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    -webkit-transform-origin: 100% 0;
+    transform-origin: 100% 0;
+    opacity: 1;
+    position: absolute;
+    top: 36px;
+    left: calc(100% - 82px - 1155px);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transform-origin: 100% 0;
+    transform-origin: 100% 0;
+    opacity: 1;
+    position: absolute;
+    top: 100px;
+    left: calc(50% - 577.5px);
+  }
+} */
 @keyframes scale-out-tr {
   0% {
     -webkit-transform: scale(1);

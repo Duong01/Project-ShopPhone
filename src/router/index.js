@@ -9,6 +9,7 @@ const ProductDetail = () => import('@/components/ProductDetail')
 const AddCart = () => import('@/components/AddCart.vue')
 const PersonalInformation = () => import('@/components/PersonalInformation.vue')
 import Layout from '@/components/Layout'
+import Test from '@/components/Test'
 
 // pages
 // Categories
@@ -58,6 +59,11 @@ const routes = [
     path: '/exams',
     name: 'Exams',
     component: Exams
+  },
+  {
+    path: '/test',
+    name: 'Test',
+    component: Test
   },
   {
     path: '/login',

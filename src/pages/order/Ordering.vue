@@ -14,8 +14,8 @@
         <tr v-for="item,index in order" :key="index">
           <td>{{ index +1 }}</td>
           <td>{{ item.id }}</td>
-          <td>{{ item.createDate }}</td>
-          <td>{{ item.receivedDate }}</td>
+          <td>{{ calculateDelivery(item.createDate) }}</td>
+          <td>{{ calculateDeliveryDate(item.createDate) }}</td>
           <td>{{ item.status }}</td>
         </tr>
       </tbody>
@@ -48,18 +48,33 @@ export default {
     },
   },
   methods: {
+    // Date Time
+    calculateDeliveryDate(createDate) {
+      const deliveryDate = new Date(createDate); // Tạo một đối tượng ngày từ ngày đặt hàng
+      deliveryDate.setDate(deliveryDate.getDate() + 3); // Thêm 3 ngày vào ngày đặt hàng
+      return deliveryDate.toISOString().slice(0, 10); // Trả về ngày giao hàng dự kiến dưới dạng YYYY-MM-DD
+    },
+    calculateDelivery(createDate) {
+      const deliveryDate = new Date(createDate); // Tạo một đối tượng ngày từ ngày đặt hàng
+      deliveryDate.setDate(deliveryDate.getDate()); // Thêm 3 ngày vào ngày đặt hàng
+      return deliveryDate.toISOString().slice(0, 10); // Trả về ngày giao hàng dự kiến dưới dạng YYYY-MM-DD
+    },
     getAll() {
-        axios.get(`http://localhost:8181/api/order/listorderbystatus?status=${this.name}&userId=${this.getEmpInfor}`)
+      axios
+        .get(
+          `http://localhost:8181/api/order/listorderbystatus?userId=${this.getEmpInfor}`
+        )
         .then((res) => {
-          if(res.status == 200){
-            this.order = res.data
-            this.$store.state.isLoading = false
+          if (res.status == 200) {
+            this.order = res.data.filter((order) => order.status == "Ordering");
+
+            this.$store.state.isLoading = false;
           }
-          if(res.data.length == 0){
-            this.text = 'Không có đơn hàng nào cần sử lý'
-            }
-        })
-        this.$store.state.isLoading = true
+          if (this.order == '') {
+            this.text = "Không có đơn hàng nào cần sử lý";
+          }
+        });
+      this.$store.state.isLoading = true;
     },
     showDetail(item){
       this.$confirm(`  

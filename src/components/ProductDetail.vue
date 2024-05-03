@@ -1,5 +1,5 @@
 <template>
-  <div class="detail">
+  <div class="detail" v-loading="this.$store.state.isLoading">
     <div class="top" style="height: 30px; line-height: 30px">
       <h1 style="float: left; margin: 0 20px; font-size: 24px">
         {{ products.name }}
@@ -25,7 +25,7 @@
         </div>
         <div class="price" style="border: 2px solid orange">
           <div class="title" style="">
-            <h3 style="color: red">
+            <h3 style="color: red" >
               {{ Number(products.promotionPrice).toLocaleString() }}đ
             </h3>
             <el-badge value="hot" class="item">
@@ -68,26 +68,28 @@
             </div>
           </div>
           <div class="area_order">
-            <button
-              @click="openDialog(products)"
-              style="
-                border-radius: 20px;
-                color: #fff;
-                width: 100%;
-                border: 1px solid orange;
-                background: -webkit-linear-gradient(top, #fd6e1d, #f59000);
-                height: 80px;
-              "
-              type="button"
-            >
-              <el-icon style="font-size: 20px; margin: 5px 5px"
-                ><ShoppingCart
-              /></el-icon>
-              <b>{{ $t("Thêm vào giỏ hàng") }} </b>
-              <p style="color: #fff">
-                {{ $t("Giao trong 1 giờ hoặc nhận tại cửa hàng") }}
-              </p>
-            </button>
+            <router-link :to="{name: 'AddCart',params: {id: products.id}}">
+              <button
+                
+                style="
+                  border-radius: 20px;
+                  color: #fff;
+                  width: 100%;
+                  border: 1px solid orange;
+                  background: -webkit-linear-gradient(top, #fd6e1d, #f59000);
+                  height: 80px;
+                "
+                type="button"
+              >
+                <el-icon style="font-size: 20px; margin: 5px 5px"
+                  ><ShoppingCart
+                /></el-icon>
+                <b>{{ $t("Thêm vào giỏ hàng") }} </b>
+                <p style="color: #fff">
+                  {{ $t("Giao trong 1 giờ hoặc nhận tại cửa hàng") }}
+                </p>
+              </button>
+            </router-link>
           </div>
         </div>
         <div
@@ -171,27 +173,43 @@
       </div>
     </transition>
   </div>
+  <h3 class="tenKhung" style="margin: 30px 0 0 0;background-image: linear-gradient(120deg, #ff9c00 0%, #ec1f1f 50%, #ff9c00 100%);">* {{$t('CÁC SẢN PHẨM CÙNG TẦM GIÁ')}} *</h3>
+  <ProductDetail1 :price="products.promotionPrice"/>
 </template>
 
 <script>
 import axios from "axios";
 import { ElMessage } from "element-plus";
+import ProductDetail1 from './ProductDetail1'
 export default {
   name: "ProductDetail",
   data() {
     return {
-      value: 4.5,
+      value: 0,
       products: [],
       cateId: "",
       text: "",
       num: 1,
       radio: "",
+      price: 0,
       wrapperVisible: false,
       dialogVisible: false,
     };
   },
+  components: {
+    ProductDetail1
+  },
   created() {
     this.showProduct();
+  },
+  mounted(){
+    this.showProduct()
+    this.$watch(
+      () => this.$route.fullPath,
+      () => {
+        this.showProduct();
+      }
+    );
   },
   computed: {
     getEmpInfor() {
@@ -200,17 +218,23 @@ export default {
       return "";
     },
   },
+  
   methods: {
     showProduct() {
+      this.$store.state.isLoading = true;
       axios
         .get(
           `http://localhost:8181/api/products/findproductbyid?id=${this.$route.params.id}`
         )
         .then((res) => {
           if (res.status == 200) {
+            this.$store.state.isLoading = false;
             this.products = res.data;
+            this.price = res.data.promotionPrice
+            this.value = res.data.status
           }
-        });
+        })
+        .catch(() =>{})
     },
     addcart(item) {
       axios
@@ -248,6 +272,17 @@ export default {
 </script>
 
 <style scoped>
+h3{
+  display: block;
+    line-height: 1.5em;
+    font-size: 1.5em;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 1em;
+    color: white;
+    transform: translateY(-0.75em);
+    margin: 20px 0  0  0;
+}
 li {
   display: block;
   border-top: 1px solid #e5e5e5;

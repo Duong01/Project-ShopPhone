@@ -50,11 +50,17 @@
               <hr />
             </li>
             <li class="list-group-item d-flex justify-content-between">
+              <span>{{ $t("Vận chuyển") }}</span>
+              <strong>
+                <el-tag size="small">Miễn phí vận chuyển</el-tag> <br>
+                 <p style="font-size: 12px; border: 1px solid #ccc; font-weight: normal;">Tới: {{ user.address }}</p>
+              </strong>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
               <span>{{ $t("Tổng tiền") }}</span>
               <strong>{{ cartTotal.toLocaleString() }}đ</strong>
             </li>
           </ul>
-
           <div class="input-group">
             <input
               type="text"
@@ -228,8 +234,10 @@ export default {
           `http://localhost:8181/api/cart/showcartbyuserid?userid=${this.getEmpInfor}`
         )
         .then((res) => {
+          
           if (res.status == 200 && res.data != null) {
             this.cart = res.data;
+            // this.soldCount;
             this.count = res.data.length;
           }
         });
@@ -249,14 +257,13 @@ export default {
       this.timenow = date;
     },
     buy() {
-      if (this.radio == '') {
+      if (this.radio == "") {
         ElMessage({
           message: "Check status salary.",
           grouping: true,
           type: "error",
         });
-      } 
-      else {
+      } else {
         for (let i = 0; i < this.count; i++) {
           axios
             .post(`http://localhost:8181/api/order/inserorder`, {
@@ -264,40 +271,53 @@ export default {
               userId: this.cart[i].userId,
               createDate: this.timenow,
               receivedDate: this.timenow,
+              qty: this.cart[i].qty,
               price: this.cart[i].productPrice * this.cart[i].qty,
               status: "Processing",
             })
             .then((res) => {
-              
-                this.idOrder = res.data.id;
-
-          axios.post(
-            `http://localhost:8181/api/orderdetail/insertorderdetail`,
-            {
-              orderId: this.idOrder,
-              productId: this.cart[i].productId,
-              qty: this.cart[i].qty,
-              productPrice: this.cart[i].productPrice,
-              productName: this.cart[i].productName,
-              productImage: this.cart[i].productImage,
-              userName: this.user.fullname,
-              userAddress: this.user.address,
-              userPhone: this.user.phone,
-              userEmail: this.user.email,
-            }
-          ).then((res) => {
-            if (res.data == 'ok' && res.status == 200) {
-              alert("Đặt hàng thành công");
-              this.$router.push("/order");
-            }
-          });
-        });
+              console.log(res);
+              this.idOrder = res.data.id;
+              // axios.put(`http://localhost:8181/api/products/updateqtyproduct`,{
+              //   id: this.cart[i].productId,
+              //   soldCount:  this.cart[i].qty
+              // })
+              axios
+                .post(
+                  `http://localhost:8181/api/orderdetail/insertorderdetail`,
+                  {
+                    orderId: this.idOrder,
+                    productId: this.cart[i].productId,
+                    qty: this.cart[i].qty,
+                    productPrice: this.cart[i].productPrice,
+                    productName: this.cart[i].productName,
+                    productImage: this.cart[i].productImage,
+                    userName: this.user.fullname,
+                    userAddress: this.user.address,
+                    userPhone: this.user.phone,
+                    userEmail: this.user.email,
+                  }
+                )
+                .then((res) => {
+                  if (res.data == "ok" && res.status == 200) {
+                    ElMessage({
+                      type: "success",
+                      message: "Order success",
+                    });
+                    this.$router.push("/order");
+                  }
+                })
+                .catch(() => {
+                  ElMessage({
+                    type: "error",
+                    message: "Order error",
+                  });
+                });
+            });
         }
-        axios
-          .delete(
-            `http://localhost:8181/api/cart/deleteallcart?userId=${this.getEmpInfor}`
-          )
-          
+        axios.delete(
+          `http://localhost:8181/api/cart/deleteallcart?userId=${this.getEmpInfor}`
+        );
       }
     },
   },

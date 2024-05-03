@@ -74,7 +74,7 @@ export default {
   data() {
     return {
       tel: "535-31385", // 电话号码
-      mail: "Cnsbg-vn-training02@mail.foxconn.com", // 邮箱地址
+      mail: "nguyenvanduongit01@gmail.com", // 邮箱地址
       version: "vn-1.0", // 系统版本
       versionInfo: "", // 系统版本信息
       isDialog: false, // 是否显示版本信息弹窗

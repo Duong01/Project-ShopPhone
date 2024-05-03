@@ -1,23 +1,26 @@
 <template>
-  <div
-    class="container"
-    style="grid-template-columns: auto auto auto auto auto !important"
-    v-loading="this.$store.state.isLoading"
-  >
-    <li class="sanpham" v-for="item in products" :key="item.id">
+  <div class="container" v-loading="this.$store.state.isLoading">
+  <div class="row">
+    <div
+      class="col-md-3 mb-4"
+      v-for="item in products"
+      :key="item.id"
+    >
       <div class="card">
         <router-link :to="{ name: 'ProductDetail', params: { id: item.id } }">
-          <el-badge value="hot" class="item" style="font-size: 20px">
+          <el-badge value="hot" class="item" style="font-size:20px">
             <div class="imgBx">
               <img
-                style="width: 200px; height: 200px"
+                class="card-img-top"
                 :src="`http://localhost:8085/Files/${item.image}`"
+                alt="Product Image"
+                
               />
             </div>
           </el-badge>
-          <div class="content">
+          <div class="card-body">
             <div class="productName">
-              <a style="font-size: 14px" class="card-title">
+              <a style="font-size: 14px;" class="card-title">
                 <b>{{ item.name }}</b></a
               >
             </div>
@@ -27,10 +30,9 @@
               >
               <span>{{ Number(item.originalPrice).toLocaleString() }}đ</span>
             </div>
-
             <div class="rate">
               <el-rate
-                v-model="value"
+                v-model="item.status"
                 disabled
                 size="small"
                 show-score
@@ -48,53 +50,10 @@
           </div>
         </router-link>
       </div>
-    </li>
-    <br>
-    <div style="margin: 0 10px 0 0" class="xemTatCa justify-content-center">
-    <router-link to="" class="page-item" >
-				Xem tất cả 14 sản phẩm
-			</router-link>
-      </div>
-    <!-- Dialog -->
-    <!-- <el-dialog  v-model="dialogVisible" title="Add to cart" width="800px">
-        <div>
-        <el-image 
-          style="width: 300px; height: 300px; border:1px solid #ccc; border-radius:10px"
-          :src="`http://localhost:8085/Files/${productForm.image}`"
-          :zoom-rate="1.2"
-          :max-scale="7"
-          :min-scale="4"
-          :preview-src-list="srcList"
-          :initial-index="4"
-          fit="cover"
-          
-        />
-        <p style="color: red">
-          Giá:
-          {{ Number(productForm.promotionPrice).toLocaleString() }}đ
-        </p></div>
-      <el-form>
-        <el-radio-group v-model="radio" size="large">
-          <el-radio-button label="Đen" value="Đen" />
-          <el-radio-button label="Trắng" value="Trắng" />
-          <el-radio-button label="Đỏ" value="Đỏ" />
-        </el-radio-group>
-        <br>
-        <br>
-        <el-input-number v-model="num" :min="1" />
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="dialogVisible = false">Cancel</el-button>
-          <el-button :plain="true" type="primary" @click="addcart(productForm)">
-            Add cart
-          </el-button>
-        </div>
-      </template>
-    </el-dialog> -->
-
+    </div>
   </div>
-  
+</div>
+
 </template>
 
 <script>
@@ -107,7 +66,7 @@ export default {
     return {
       products: [],
       productForm: [],
-      value: 4.5,
+      value: 0,
       display: false,
       num: 1,
       radio: ref('Đen'),
@@ -137,10 +96,10 @@ export default {
   methods: {
     getAll() {
       axios
-        .get("http://localhost:8181/api/products/listproducthot?status=1")
+        .get("http://localhost:8181/api/products/listproducthot?status=5")
         .then((res) => {
           if (res.data != null) {
-            this.products = res.data.slice(0, 10);
+            this.products = res.data.slice(0, 8);
             this.$store.state.isLoading = false;
           } else {
             res.data = "Không có sản phẩm nào";
@@ -198,6 +157,7 @@ export default {
 </script>
 
 <style scoped>
+
 .xemTatCa {
     display: flex;
     font-weight: bold;
@@ -234,9 +194,9 @@ li a {
   position: relative;
   width: 100%;
   max-width: 1200px;
-  display: grid;
+  /* display: grid;
   grid-template-columns: auto auto auto auto auto !important ;
-  grid-gap: 20px;
+  grid-gap: 20px; */
   padding: 30px;
   z-index: 0;
   margin: auto;
@@ -247,7 +207,7 @@ li a {
 }
 
 .container .card {
-  width: 100%;
+  width: 95%;
   background: #fff;
   border-radius: 10px;
   box-shadow: 2px 2px 2px gray;
@@ -276,7 +236,7 @@ li a {
 }
 
 .container .card .imgBx:hover {
-  transition: 0.5s;
+  transition: 0.7s;
   transform: scale(1.1);
 }
 
@@ -295,21 +255,21 @@ li a {
   /* margin-top:10px; */
 }
 
-.container .card .content .price {
+.container .card .price {
   /* text-align: center; */
   margin: 10px;
   font-size: 14px;
   float: left;
 }
-.container .card .content .price span {
+.container .card .price span {
   margin: 10px;
   color: #000;
   text-decoration: line-through;
 }
-.container .card .content .price strong {
+.container .card .price strong {
   color: red;
 }
-.container .card .content .original-price {
+.container .card .original-price {
   color: darkred;
   text-align: center;
   margin-right: 10px;

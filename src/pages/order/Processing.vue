@@ -15,11 +15,16 @@
         <tr v-for="(item, index) in order" :key="index">
           <td>{{ index + 1 }}</td>
           <td>{{ item.id }}</td>
-          <td>{{ item.createDate }}</td>
-          <td>Dự kiến giao hàng {{ item.createDate }}</td>
+          <td>{{ calculateDelivery(item.createDate) }}</td>
+          <td>Dự kiến giao hàng {{ calculateDeliveryDate(item.createDate) }}</td>
           <td>{{ item.status }}</td>
           <td>
-            <button class="btn btn-warning" plain @click="DeleteOrder(item)">
+            <button
+              class="btn btn-warning"
+              :disabled="item.status != 'Processing'"
+              plain
+              @click="DeleteOrder(item)"
+            >
               Hủy đơn hàng
             </button>
             <button class="btn btn-primary" @click="showDetail(item)">
@@ -45,12 +50,11 @@
         align-center
         finish-status="success"
       >
-        <el-step title="Processing" />
+        <el-step :active="1" title="Processing" />
         <el-step title="Processed" />
         <el-step title="Ordering" />
-        <el-step title="Success" />
       </el-steps>
-      <br>
+      <br />
       <el-table :data="order_details">
         <el-table-column prop="orderId" label="Order ID" width="120" />
         <el-table-column prop="productName" label="Product Name" width="120" />
@@ -81,7 +85,6 @@
 <script>
 import { ElMessage, ElMessageBox } from "element-plus";
 import axios from "axios";
-import { ref } from 'vue'
 
 export default {
   name: "ProcessingPage",
@@ -91,15 +94,11 @@ export default {
       order: [],
       order_details: [],
       text: "",
-      name: "Processing",
-      active: ''
+      active: 0,
     };
   },
   created() {
-    this.getAll(); 
-    if(this.order.status == 'Processing'){
-      this.active = ref(1)
-    }
+    this.getAll();
   },
   computed: {
     getEmpInfor() {
@@ -107,25 +106,40 @@ export default {
       if (emp != undefined) return emp.id;
       return "";
     },
+    
   },
   methods: {
+    // Date Time
+    calculateDeliveryDate(createDate) {
+      const deliveryDate = new Date(createDate); // Tạo một đối tượng ngày từ ngày đặt hàng
+      deliveryDate.setDate(deliveryDate.getDate() + 3); // Thêm 3 ngày vào ngày đặt hàng
+      return deliveryDate.toISOString().slice(0, 10); // Trả về ngày giao hàng dự kiến dưới dạng YYYY-MM-DD
+    },
+    calculateDelivery(createDate) {
+      const deliveryDate = new Date(createDate); // Tạo một đối tượng ngày từ ngày đặt hàng
+      deliveryDate.setDate(deliveryDate.getDate()); // Thêm 3 ngày vào ngày đặt hàng
+      return deliveryDate.toISOString().slice(0, 10); // Trả về ngày giao hàng dự kiến dưới dạng YYYY-MM-DD
+    },
     getAll() {
       axios
         .get(
-          `http://localhost:8181/api/order/listorderbystatus?status=${this.name}&userId=${this.getEmpInfor}`
+          `http://localhost:8181/api/order/listorderbystatus?userId=${this.getEmpInfor}`
         )
         .then((res) => {
           if (res.status == 200) {
-            this.order = res.data;
+            this.order = res.data.filter((order) => order.status !== "Success");
+
             this.$store.state.isLoading = false;
           }
-          if (res.data.length == 0) {
+          if (this.order == '') {
             this.text = "Không có đơn hàng nào cần sử lý";
           }
         });
       this.$store.state.isLoading = true;
     },
+
     DeleteOrder(item) {
+      console.log(item);
       ElMessageBox.confirm(
         "Are you sure you want to cancel your order?",
         "Warning",
@@ -135,18 +149,32 @@ export default {
           type: "warning",
         }
       )
+      
         .then(() => {
-          axios
-            .delete(`http://localhost:8181/api/order/deleteorder?id=${item.id}`)
+          axios.delete(`http://localhost:8181/api/orderdetail/deleteorderdetail?orderId=${item.id}`)
+            .then(() => {
+              
+              
+            })
+            .catch(() => {
+
+            });
+          axios.delete(`http://localhost:8181/api/order/deleteorder?id=${item.id}`)
             .then((res) => {
               if (res.data == true && res.status == 200) {
+                ElMessage({
+                  type: "success",
+                  message: "Delete completed",
+                });
                 this.getAll();
               }
+            })
+            .catch(() => {
+              ElMessage({
+                type: "error",
+                message: "Delete error",
+              });
             });
-          ElMessage({
-            type: "success",
-            message: "Delete completed",
-          });
         })
         .catch(() => {
           ElMessage({
@@ -163,15 +191,25 @@ export default {
           `http://localhost:8181/api/orderdetail/listorderdetail?orderId=${item.id}`
         )
         .then((res) => {
-          // console.log(res)
           if (res.status == 200) {
             this.order_details = res.data;
           }
-          
         })
         .catch((err) => {
           alert("Co loi", err);
         });
+      if (item.status == "Processing") {
+        this.active = 1;
+      }
+      if (item.status == "Processed") {
+        this.active = 2;
+      }
+      if (item.status == "Ordering") {
+        this.active = 3;
+      }
+      if (item.status == "Success") {
+        this.active = 4;
+      }
     },
   },
 };

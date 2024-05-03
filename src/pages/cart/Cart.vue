@@ -5,9 +5,10 @@
         <tr>
           <th scope="col">STT</th>
           <th scope="col">{{ $t("Tên sản phẩm") }}</th>
-          <th scope="col">{{ $t("Giá sản phẩm") }}</th>
           <th scope="col">{{ $t("Số lượng") }}</th>
           <th scope="col">{{ $t("Màu sắc") }}</th>
+          <th scope="col">{{ $t("Dung lượng") }}</th>
+          <th scope="col">{{ $t("Giá sản phẩm") }}</th>
           <th scope="col">{{ $t("Hình ảnh") }}</th>
         </tr>
       </thead>
@@ -15,13 +16,16 @@
         <tr v-for="(item, index) in cart" :key="item.id" ref="list">
           <td>{{ index + 1 }}</td>
           <td>{{ item.productName }}</td>
-          <td>{{ Number(item.productPrice).toLocaleString() }}đ</td>
           <td>
             <div class="count">{{ item.qty }}</div>
           </td>
           <td>
             <div class="count">{{ item.color }}</div>
           </td>
+          <td>
+            <div class="count">{{ item.capacity }}</div>
+          </td>
+          <td>{{ Number(item.productPrice).toLocaleString() }}đ</td>
           <td>
             <img
               width="100"
@@ -70,8 +74,7 @@ export default {
   data() {
     return {
       cart: [],
-      picked: "",
-      
+      picked: "", 
       dialogFormVisible: false,
       count: 0,
       timenow: "",

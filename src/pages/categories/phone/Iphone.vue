@@ -1,152 +1,132 @@
 <template>
-<div class="container" v-loading="this.$store.state.isLoading">
-    <li v-for="item in products" :key="item.id" >
-          <div class="card">
-              <div class="imgBx">
-                <router-link :to="{ name: 'ProductDetail',params:{id:item.id}}">
-                  <a href=""><img :src="`http://localhost:8085/Files/${item.image}` " alt="No Image"></a>
-                </router-link>
-              </div>
-              <div class="content">
-                <div class="productName">
-                 <a style="font-size: 14px;" class="card-title"> <b>{{item.name}}</b></a>
-                </div>
-                <div class="original-price">
-                  OriginalPrice: {{Number(item.originalPrice).toLocaleString()}}đ
-                </div>
-                <div class="price">
-                  Price: {{Number(item.promotionPrice).toLocaleString()}}đ
-                </div>
-                <div>
-                  SoldCount: {{item.soldCount}}
-                </div>
-                <div class="action">
-                  <router-link to="">
-                    <button class="add-cart" @click="openDialog(item)">Add Cart</button>
-                  </router-link>
-                  
-                  <router-link :to="{ name: 'ProductDetail',params:{id:item.id}}">
-                    <button class="detail">Product Detail</button>
-                  </router-link>
-                </div>
-              </div>
+  <div class="container" v-loading="this.$store.state.isLoading">
+    <li v-for="item in products" :key="item.id">
+      <div class="card">
+        <div class="imgBx">
+          <router-link :to="{ name: 'ProductDetail', params: { id: item.id } }">
+            <a href=""
+              ><img
+                :src="`http://localhost:8085/Files/${item.image}`"
+                alt="No Image"
+            /></a>
+          </router-link>
+        </div>
+        <div class="content">
+          <div class="productName">
+            <a style="font-size: 14px" class="card-title">
+              <b>{{ item.name }}</b></a
+            >
           </div>
-      </li>
-    <transition name="fade">
-      <div class="dialog-wrapper" v-show="wrapperVisible" >
-        <transition name="scale">
-          <div v-if="dialogVisible" class="dialog">
-            <i style="float:right; padding: 20px; font-size: 20px;" class="el-icon-close" @click="closeDialog"></i>
-            <div class="dialog-body">
-              <div style="margin:30px 0;display:flex;justify-content:center;align-items:center">
-                 <div class="img">
-                  <img
-                :src="`http://localhost:8085/Files/${loudspeakerDetail.image}`"
-                alt="No Image"/>
-               <p style="color: red">Giá: {{Number(loudspeakerDetail.promotionPrice).toLocaleString()}} đ</p>
-                 </div>
-                 <div class="mau">
-                  <el-radio-group v-model="radio" size="large">
-                    <el-radio-button label="Đỏ" value="Đỏ"/>
-                    <el-radio-button label="Đen" value="Đen"/>
-                    <el-radio-button label="Trắng" value="Trắng"/>
-                  </el-radio-group>
-                 </div>
-                 <br>
-                 <div class="count">
-                  <el-input-number v-model="num" :min="1" />
-                 </div>
-                 <br>
-                <button class="add-cart btn btn-success" @click="addcart(loudspeakerDetail)">Add Cart</button>
-              </div>
-            </div>
+          <div class="original-price">
+            OriginalPrice: {{ Number(item.originalPrice).toLocaleString() }}đ
           </div>
-        </transition>
+          <div class="price">
+            Price: {{ Number(item.promotionPrice).toLocaleString() }}đ
+          </div>
+          <div>SoldCount: {{ item.soldCount }}</div>
+          <div class="action">
+            <router-link :to="{name: 'AddCart',params: {id: item.id}}">
+              <button class="add-cart" >
+                Add Cart
+              </button>
+            </router-link>
+
+            <router-link
+              :to="{ name: 'ProductDetail', params: { id: item.id } }"
+            >
+              <button class="detail">Product Detail</button>
+            </router-link>
+          </div>
+        </div>
       </div>
-    </transition>
-</div>
-  
+    </li>
+
+  </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 import { ElMessage } from "element-plus";
 export default {
-  name: 'IphonePage',
-  data () {
+  name: "IphonePage",
+  data() {
     return {
       perPage: 3,
       currentPage: 1,
       products: [],
-      cateId: '',
-      text: '',
+      cateId: "",
+      text: "",
       num: 1,
-      radio: '',
+      radio: "",
       wrapperVisible: false,
       dialogVisible: false,
-    }
+    };
   },
   created() {
-    this.getAll()
+    this.getAll();
   },
   methods: {
     getAll() {
-      axios.get(`http://localhost:8181/api/products/listproductbycate?cate=${this.cateId=39}`)
-      .then(res => {
-        if(res.data != null){
-          this.products = res.data
-        this.$store.state.isLoading = false
-
-        }                                                                                                                                                        
-        if(res.data.length == 0){
-          
-          this.text = 'Không có sản phẩm nào'
-        }
-        this.path = res.data
-      })
-      this.$store.state.isLoading = true
+      axios
+        .get(
+          `http://localhost:8181/api/products/listproductbycate?cate=${(this.cateId = 39)}`
+        )
+        .then((res) => {
+          if (res.data != null) {
+            this.products = res.data;
+            this.$store.state.isLoading = false;
+          }
+          if (res.data.length == 0) {
+            this.text = "Không có sản phẩm nào";
+          }
+          this.path = res.data;
+        });
+      this.$store.state.isLoading = true;
     },
-    addcart(item){
-      if(this.show){
-      axios.post(`http://localhost:8181/api/cart/insertcart`,{userId: this.getEmpInfor,productId: item.id,qty: this.num, productName: item.name, productPrice: item.promotionPrice,productImage: item.image})
-      .then(res =>{
-        if(res.data == 'ok' && res.status == 200){
-          alert('Add success')
-        }
-      })
-      this.dialogVisible = false;
-      this.wrapperVisible = false;}
-      else{
+    addcart(item) {
+      if (this.show) {
+        axios
+          .post(`http://localhost:8181/api/cart/insertcart`, {
+            userId: this.getEmpInfor,
+            productId: item.id,
+            qty: this.num,
+            productName: item.name,
+            productPrice: item.promotionPrice,
+            productImage: item.image,
+          })
+          .then((res) => {
+            if (res.data == "ok" && res.status == 200) {
+              alert("Add success");
+            }
+          });
+        this.dialogVisible = false;
+        this.wrapperVisible = false;
+      } else {
         ElMessage.error("You are not loggin");
       }
     },
-     openDialog (item) {
-      this.loudspeakerDetail = item
-      this.dialogVisible = true
-      this.wrapperVisible = true
+    openDialog(item) {
+      this.loudspeakerDetail = item;
+      this.dialogVisible = true;
+      this.wrapperVisible = true;
     },
-    closeDialog () {
-      this.dialogVisible = false
-      this.wrapperVisible = false
+    closeDialog() {
+      this.dialogVisible = false;
+      this.wrapperVisible = false;
     },
   },
   computed: {
-    getEmpInfor()
-    {
-       let emp = JSON.parse( localStorage["us"])
-       if(emp!=undefined)
-       return emp.id;
-      return ""
+    getEmpInfor() {
+      let emp = JSON.parse(localStorage["us"]);
+      if (emp != undefined) return emp.id;
+      return "";
     },
     show() {
-      return localStorage.getItem("us") !=undefined
-    
+      return localStorage.getItem("us") != undefined;
     },
-  }
-}
+  },
+};
 </script>
-
-
 
 <style scoped>
 li {
@@ -272,108 +252,109 @@ li {
   background: greenyellow;
   color: #172330;
 }
-.dialog-wrapper{
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    right: 0px;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(0,0,0,.5);
-  }
-.dialog{
+.dialog-wrapper {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  right: 0px;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.dialog {
   position: absolute;
-    width: 1155px;
-    height: calc(100% - 130px);
-    z-index: 1001;
-    background-color: #fff;
-    top: 100px;
-    left: calc(50% - 577.5px);
-    border-radius: 6px;
-    border: 1px solid #dbdbdb;
+  width: 1155px;
+  height: calc(100% - 130px);
+  z-index: 1001;
+  background-color: #fff;
+  top: 100px;
+  left: calc(50% - 577.5px);
+  border-radius: 6px;
+  border: 1px solid #dbdbdb;
 }
-.dialog-body{
+.dialog-body {
   margin: 30px 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.dialog-body .img{
+.dialog-body .img {
   width: 300px;
   height: 300px;
   border: 1px solid #ccc;
   border-radius: 10px;
 }
-.dialog-body .img img{
+.dialog-body .img img {
   width: 100%;
   height: 100%;
 }
-.dialog.newsitem{
-      height: 120px;
-      line-height: 120px;
-      text-align: center;
-    }
-  .el-icon-close {
-    cursor: pointer;
-    
+.dialog.newsitem {
+  height: 120px;
+  line-height: 120px;
+  text-align: center;
 }
-  .el-icon-close:hover {
-    color: red;
-    scale: 25px;
+.el-icon-close {
+  cursor: pointer;
+}
+.el-icon-close:hover {
+  color: red;
+  scale: 25px;
 }
 .scale-enter-active {
-    -webkit-animation: scale-in-tr .5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    animation: scale-in-tr .5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  -webkit-animation: scale-in-tr 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: scale-in-tr 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+.scale-leave-active {
+  -webkit-animation: scale-out-tr 0.5s cubic-bezier(0.35, 0.385, 0.58, 0.83)
+    both;
+  animation: scale-out-tr 0.5s cubic-bezier(0.35, 0.385, 0.58, 0.83) both;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+@keyframes scale-in-tr {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    -webkit-transform-origin: 100% 0;
+    transform-origin: 100% 0;
+    opacity: 1;
+    position: absolute;
+    top: 36px;
+    left: calc(100% - 82px - 1155px);
   }
-  .scale-leave-active {
-    -webkit-animation: scale-out-tr .5s cubic-bezier(0.350, 0.385, 0.580, 0.830) both;
-    animation: scale-out-tr .5s cubic-bezier(0.350, 0.385, 0.580, 0.830) both;
+  100% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transform-origin: 100% 0;
+    transform-origin: 100% 0;
+    opacity: 1;
+    position: absolute;
+    top: 100px;
+    left: calc(50% - 577.5px);
   }
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s;
+}
+@keyframes scale-out-tr {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transform-origin: 100% 0;
+    transform-origin: 100% 0;
+    opacity: 1;
+    position: absolute;
+    top: 100px;
+    left: calc(50% - 577.5px);
   }
-  @keyframes scale-in-tr {
-    0% {
-      -webkit-transform:scale(0);
-      transform:scale(0);
-      -webkit-transform-origin:100% 0;
-      transform-origin:100% 0;
-      opacity:1;
-      position: absolute;
-      top: 36px;
-      left: calc(100% - 82px - 1155px);
-    }
-    100% {
-      -webkit-transform:scale(1);
-      transform:scale(1);
-      -webkit-transform-origin:100% 0;
-      transform-origin:100% 0;
-      opacity:1;
-      position: absolute;
-      top: 100px;
-      left: calc(50% - 577.5px);
-    }
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    -webkit-transform-origin: 100% 0;
+    transform-origin: 100% 0;
+    opacity: 1;
+    position: absolute;
+    top: 36px;
+    left: calc(100% - 82px - 1155px);
   }
-  @keyframes scale-out-tr {
-    0% {
-      -webkit-transform:scale(1);
-      transform:scale(1);
-      -webkit-transform-origin:100% 0;
-      transform-origin:100% 0;
-      opacity:1;
-      position: absolute;
-      top: 100px;
-      left: calc(50% - 577.5px);
-    }
-    100% {
-      -webkit-transform:scale(0);
-      transform:scale(0);
-      -webkit-transform-origin:100% 0;
-      transform-origin:100% 0;
-      opacity:1;
-      position: absolute;
-      top: 36px;
-      left: calc(100% - 82px - 1155px);
-    }
-  }
+}
 </style>

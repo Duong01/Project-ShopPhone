@@ -82,6 +82,7 @@
               <div class="searchh">
                 <el-input
                   v-model="searchQuery"
+                  
                   style="width: 600px; border-radius: 10px"
                   clearable
                   placeholder="Search"
@@ -91,6 +92,7 @@
                     <el-button
                       type="primary"
                       style="background-color: #409eff; color: #fff"
+                      @click="search"
                     >
                       <el-icon style="vertical-align: middle">
                         <Search />
@@ -117,7 +119,7 @@
               </el-menu>
             </div>
           </div>
-          <div class="table-responsive container">
+          <div class="table-responsive container" v-if="!productSelected">
             <table
               v-if="dataAll.length"
               class="table container"
@@ -126,7 +128,7 @@
               <tbody>
                 <tr v-for="item in resultQuery" :key="item.id">
                   <td>
-                    <router-link 
+                    <router-link @click="handleProductClick(item)"
                       :to="{ name: 'ProductDetail', params: { id: item.id } }"
                     >
                       <a v-bind:href="item.id" target="_blank">{{
@@ -198,7 +200,7 @@ export default {
       wrapperVisible: false,
       dialogVisible: false,
       dataAll: [],
-      
+      productSelected: false,
     };
   },
 
@@ -207,6 +209,20 @@ export default {
     this.getAll();
   },
   methods: {
+    handleProductClick(item){
+      this.productSelected = true,
+      axios.put(`http://localhost:8181/api/products/updateproductbysearch`,{
+        id: item.id,
+        countSearch: item.countSearch + 1
+      })
+      .then(() => {
+        
+      })
+      .catch(() =>{
+
+      })
+        
+    },
     handleSelect() {},
     GetEmpNo() {
       // return localStorage.getItem('us')
@@ -303,6 +319,13 @@ export default {
       this.curLang = currLang ? currLang : "vi-VN";
       this.ChangeLang();
     },
+    search() {
+      this.productSelected = true; // Show the table when searching
+      this.productSelected = false; // Reset product selection state
+      if(this.searchQuery == ''){
+        this.$router.push('/home')
+      }
+    },
   },
   computed: {
     getEmpInfor() {
@@ -333,9 +356,10 @@ export default {
             .every((v) => item.name.toLowerCase().includes(v));
         });
       } else {
-        return "";
+        return [];
       }
     },
+    
   },
   mounted() {
     this.InitLang();
@@ -375,6 +399,7 @@ a{
   width: 100%;
   box-sizing: border-box;
   top: 0;
+  left: 0;
   z-index: 24;
   margin: 0 400px 0 0;
 }

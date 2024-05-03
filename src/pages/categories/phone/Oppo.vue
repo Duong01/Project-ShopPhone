@@ -23,8 +23,8 @@
           <div class="price">Price: {{ Number(item.promotionPrice).toLocaleString() }}đ</div>
           <div>SoldCount: {{ item.soldCount }}</div>
           <div class="action">
-            <router-link to="">
-              <button class="add-cart" @click="openDialog(item)">
+            <router-link :to="{name: 'AddCart',params: {id: item.id}}">
+              <button class="add-cart">
                 Add Cart
               </button>
             </router-link>
@@ -38,57 +38,6 @@
         </div>
       </div>
     </li>
-    <transition name="fade">
-      <div class="dialog-wrapper" v-show="wrapperVisible">
-        <transition name="scale">
-          <div v-if="dialogVisible" class="dialog">
-            <i
-              style="float: right; padding: 20px; font-size: 20px"
-              class="el-icon-close"
-              @click="closeDialog"
-            ></i>
-            <div class="dialog-body">
-              <div
-                style="
-                  margin: 30px 0;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                "
-              >
-                <div class="img">
-                  <img
-                    :src="`http://localhost/Files/${loudspeakerDetail.image}`"
-                    alt="No Image"
-                  />
-                  <p style="color: red">
-                    Giá: {{ Number(loudspeakerDetail.promotionPrice).toLocaleString() }}đ
-                  </p>
-                </div>
-                <div class="mau">
-                  <el-radio-group v-model="radio" size="large">
-                    <el-radio-button label="Đỏ" value="Đỏ" />
-                    <el-radio-button label="Đen" value="Đen" />
-                    <el-radio-button label="Trắng" value="Trắng" />
-                  </el-radio-group>
-                </div>
-                <br />
-                <div class="count">
-                  <el-input-number v-model="num" :min="1" />
-                </div>
-                <br />
-                <button
-                  class="add-cart btn btn-success"
-                  @click="addcart(loudspeakerDetail)"
-                >
-                  Add Cart
-                </button>
-              </div>
-            </div>
-          </div>
-        </transition>
-      </div>
-    </transition>
   </div>
 </template>
 

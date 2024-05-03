@@ -189,7 +189,6 @@ export default {
         alert("Vui lòng nhập đầy đủ email và password");
       }
       if (this.userInput === this.captcha) {
-
         axios
           .post(`http://localhost:8181/api/user/login`, {
             email: this.email,
@@ -206,16 +205,25 @@ export default {
               status: result.data.status,
               address: result.data.address,
             };
-            localStorage.setItem("us", JSON.stringify(us));
+            
             if (result.status == 200) {
+              if(result.data.status == 1){
+                  localStorage.setItem("us", JSON.stringify(us));
+                  ElMessage({
+                    message: "Login Success",
+                    type: "success",
+                  });
+                this.$store.commit("setEmpInfor", us);
+                this.$router.push("/home");
+              } else {
+                ElMessage.error("Fail email or password");
+              }
+            }
+            else{
               ElMessage({
-                message: "Login Success",
-                type: "success",
-              });
-              this.$store.commit("setEmpInfor", us);
-              this.$router.push("/home");
-            } else {
-              ElMessage.error("Fail email or password");
+                  message: "Account has been locked",
+                  type: "error",
+                });
             }
           })
           .catch(() => {

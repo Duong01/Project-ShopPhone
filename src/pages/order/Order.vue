@@ -8,9 +8,9 @@
           :default-active="$route.path"
           :ellipsis="false"
           router>
-          <el-menu-item index="/order/processing">{{$t('Đang xử lý')}}  </el-menu-item>
-          <el-menu-item index="/order/processed">{{$t('Đã xử lý')}}</el-menu-item>
-          <el-menu-item index="/order/ordering">{{$t('Đang vận chuyển')}}</el-menu-item>
+          <el-menu-item index="/order/processing">{{$t('Chờ xác nhận')}}  </el-menu-item>
+          <el-menu-item index="/order/processed">{{$t('Chờ lấy hàng')}}</el-menu-item>
+          <el-menu-item index="/order/ordering">{{$t('Chờ vận chuyển')}}</el-menu-item>
           <el-menu-item index="/order/success">{{$t('Đã hoàn thành')}}</el-menu-item>
         </el-menu>
       </div>

@@ -1,65 +1,61 @@
 <template>
   <div class="container" v-loading="this.$store.state.isLoading">
-  <div class="row">
-    <div
-      class="col-md-3 mb-4"
-      v-for="item in products"
-      :key="item.id"
-    >
-      <div class="card">
-        <router-link :to="{ name: 'ProductDetail', params: { id: item.id } }">
-          <el-badge value="hot" class="item" style="font-size: 20px">
-            <div class="imgBx">
-              <img
-                class="card-img-top"
-                :src="`http://localhost:8085/Files/${item.image}`"
-                alt="Product Image"
-              />
+    <div class="row">
+      <div class="col-md-3 mb-4" v-for="item in sortedProducts" :key="item.id">
+        <div class="card">
+          <router-link :to="{ name: 'ProductDetail', params: { id: item.id } }">
+            <el-badge value="hot" class="item" style="font-size: 20px">
+              <div class="imgBx">
+                <img
+                  class="card-img-top"
+                  :src="`http://localhost:8085/Files/${item.image}`"
+                  alt="Product Image"
+                />
+              </div>
+            </el-badge>
+            <div class="card-body">
+              <div class="productName">
+                <a style="font-size: 14px" class="card-title">
+                  <b>{{ item.name }}</b></a
+                >
+              </div>
+              <div class="price">
+                <strong
+                  >{{ Number(item.promotionPrice).toLocaleString() }}đ</strong
+                >
+                <span>{{ Number(item.originalPrice).toLocaleString() }}đ</span>
+              </div>
+              <div class="rate">
+                <el-rate
+                  v-model="item.status"
+                  disabled
+                  size="small"
+                  show-score
+                  text-color="#ff9900"
+                  score-template="{value} points"
+                />
+              </div>
             </div>
-          </el-badge>
-          <div class="card-body">
-            <div class="productName">
-              <a style="font-size: 14px" class="card-title">
-                <b>{{ item.name }}</b></a
-              >
-            </div>
-            <div class="price">
-              <strong
-                >{{ Number(item.promotionPrice).toLocaleString() }}đ</strong
-              >
-              <span>{{ Number(item.originalPrice).toLocaleString() }}đ</span>
-            </div>
-            <div class="rate">
-              <el-rate
-                v-model="item.status"
-                disabled
-                size="small"
-                show-score
-                text-color="#ff9900"
-                score-template="{value} points"
-              />
-            </div>
-          </div>
-        </router-link>
-        <router-link :to="{name: 'AddCart',params: {id: item.id}}">
-          <div class="action">
+          </router-link>
+          <router-link :to="{ name: 'AddCart', params: { id: item.id } }">
+            <div class="action">
               <button class="add-cart">+</button>
-            
-            <span class="tooltiptext"> Add cart </span>
-          </div>
-        </router-link>
+
+              <span class="tooltiptext"> Add cart </span>
+            </div>
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
-import { ref } from 'vue'
 import axios from "axios";
-import { ElMessage } from 'element-plus'
+import { ref } from "vue";
+import { ElMessage } from "element-plus";
 export default {
-  name: "ProductNew",
+  name: "RecommendedForYou",
   data() {
     return {
       products: [],
@@ -67,7 +63,7 @@ export default {
       value: 4.5,
       display: false,
       num: 1,
-      radio: ref('Đen'),
+      radio: ref("Đen"),
       dialogVisible: false,
       state: "",
     };
@@ -76,9 +72,9 @@ export default {
     this.getAll();
   },
   filters: {
-    toUSD (value) {
-      return `$${value.toLocaleString()}`
-    }
+    toUSD(value) {
+      return `$${value.toLocaleString()}`;
+    },
   },
   computed: {
     getEmpInfor() {
@@ -87,17 +83,22 @@ export default {
       return "";
     },
     show() {
-      return localStorage.getItem("us") !=undefined
-    
+      return localStorage.getItem("us") != undefined;
     },
+    sortedProducts() {
+      const sorted = [...this.products];
+      // Sắp xếp sản phẩm theo giá từ cao xuống thấp
+      sorted.sort((a, b) => b.countSearch - a.countSearch);
+      return sorted.slice(0, 8);
+    }
   },
   methods: {
     getAll() {
       axios
-        .get("http://localhost:8181/api/products/listproducthot?status=5")
+        .get("http://localhost:8181/api/products/listproduct")
         .then((res) => {
           if (res.data != null) {
-            this.products = res.data.slice(0, 8);
+            this.products = res.data;
             this.$store.state.isLoading = false;
           } else {
             res.data = "Không có sản phẩm nào";
@@ -113,30 +114,30 @@ export default {
       this.productForm = [item.data];
       this.display = true;
     },
+
     addcart(item) {
-      if(this.show){
-      axios
-        .post(`http://localhost:8181/api/cart/insertcart`, {
-          userId: this.getEmpInfor,
-          productId: item.id,
-          qty: this.num,
-          productName: item.name,
-          productPrice: item.promotionPrice,
-          productImage: item.image,
-          color: this.radio
-        })
-        .then((res) => {
-          if (res.data == "ok" && res.status == 200) {
-            ElMessage({
-              message: "Add cart success.",
-              grouping: true,
-              type: "success",
-            });
-          }
-        });
-      this.dialogVisible = false;
-      }
-      else{
+      if (this.show) {
+        axios
+          .post(`http://localhost:8181/api/cart/insertcart`, {
+            userId: this.getEmpInfor,
+            productId: item.id,
+            qty: this.num,
+            productName: item.name,
+            productPrice: item.promotionPrice,
+            productImage: item.image,
+            color: this.radio,
+          })
+          .then((res) => {
+            if (res.data == "ok" && res.status == 200) {
+              ElMessage({
+                message: "Add cart success.",
+                grouping: true,
+                type: "success",
+              });
+            }
+          });
+        this.dialogVisible = false;
+      } else {
         ElMessage.error("You are not loggin");
       }
     },
@@ -149,34 +150,33 @@ export default {
     openDialog(item) {
       this.productForm = item;
       this.dialogVisible = true;
-    }
+    },
   },
 };
 </script>
 
 <style scoped>
-
 .xemTatCa {
-    display: flex;
-    font-weight: bold;
-    text-align: center;
-    margin: 0 auto;
-    padding: .5em 1em;
-    border-radius: 1em;
-    color: #888;
-    background-color: #eee;
-    transition-duration: .2s;
-    transform: translateY(1em);
-    border-left: 2px solid #42bcf4;
-    border-right: 2px solid #42bcf4;
+  display: flex;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 auto;
+  padding: 0.5em 1em;
+  border-radius: 1em;
+  color: #888;
+  background-color: #eee;
+  transition-duration: 0.2s;
+  transform: translateY(1em);
+  border-left: 2px solid #42bcf4;
+  border-right: 2px solid #42bcf4;
 }
 .xemTatCa:hover {
-    background-color: #ccc;
-    color: #000;
+  background-color: #ccc;
+  color: #000;
 }
-a{
-    text-decoration: none;
-    color: #222;
+a {
+  text-decoration: none;
+  color: #222;
 }
 li {
   width: 223px;
@@ -193,8 +193,8 @@ li a {
   width: 100%;
   max-width: 1200px;
   /* display: grid;
-  grid-template-columns: auto auto auto auto auto !important ;
-  grid-gap: 20px; */
+    grid-template-columns: auto auto auto auto auto !important ;
+    grid-gap: 20px; */
   padding: 30px;
   z-index: 0;
   margin: auto;
@@ -205,7 +205,7 @@ li a {
 }
 
 .container .card {
-  width: 100%;
+  width: 95%;
   background: #fff;
   border-radius: 10px;
   box-shadow: 2px 2px 2px gray;
@@ -400,27 +400,27 @@ button.add-cart {
   transition: opacity 0.5s;
 }
 /* @keyframes scale-in-tr {
-  0% {
-    -webkit-transform: scale(0);
-    transform: scale(0);
-    -webkit-transform-origin: 100% 0;
-    transform-origin: 100% 0;
-    opacity: 1;
-    position: absolute;
-    top: 36px;
-    left: calc(100% - 82px - 1155px);
-  }
-  100% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-    -webkit-transform-origin: 100% 0;
-    transform-origin: 100% 0;
-    opacity: 1;
-    position: absolute;
-    top: 100px;
-    left: calc(50% - 577.5px);
-  }
-} */
+    0% {
+      -webkit-transform: scale(0);
+      transform: scale(0);
+      -webkit-transform-origin: 100% 0;
+      transform-origin: 100% 0;
+      opacity: 1;
+      position: absolute;
+      top: 36px;
+      left: calc(100% - 82px - 1155px);
+    }
+    100% {
+      -webkit-transform: scale(1);
+      transform: scale(1);
+      -webkit-transform-origin: 100% 0;
+      transform-origin: 100% 0;
+      opacity: 1;
+      position: absolute;
+      top: 100px;
+      left: calc(50% - 577.5px);
+    }
+  } */
 @keyframes scale-out-tr {
   0% {
     -webkit-transform: scale(1);
