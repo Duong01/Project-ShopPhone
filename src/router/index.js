@@ -9,7 +9,7 @@ const ProductDetail = () => import('@/components/ProductDetail')
 const AddCart = () => import('@/components/AddCart.vue')
 const PersonalInformation = () => import('@/components/PersonalInformation.vue')
 import Layout from '@/components/Layout'
-import Test from '@/components/Test'
+import AllProduct from '@/components/AllProduct'
 
 // pages
 // Categories
@@ -60,11 +60,7 @@ const routes = [
     name: 'Exams',
     component: Exams
   },
-  {
-    path: '/test',
-    name: 'Test',
-    component: Test
-  },
+  
   {
     path: '/login',
     name: "login",
@@ -172,6 +168,11 @@ const routes = [
       name: 'Thanhtoan',
       component: Thanhtoan,
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/seemore',
+      name: 'AllProduct',
+      component: AllProduct
     },
     {
       path: '/tintuc',

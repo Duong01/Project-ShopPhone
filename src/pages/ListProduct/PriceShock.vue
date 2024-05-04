@@ -51,6 +51,9 @@
       </div>
     </div>
   </div>
+  <router-link class="xemTatCa" :to="{name: 'AllProduct', params: {}}" >
+    Xem thêm
+  </router-link>
 </div>
 </template>
 
@@ -165,10 +168,9 @@ export default {
     border-radius: 1em;
     color: #888;
     background-color: #eee;
+    justify-content: center;
     transition-duration: .2s;
     transform: translateY(1em);
-    border-left: 2px solid #42bcf4;
-    border-right: 2px solid #42bcf4;
 }
 .xemTatCa:hover {
     background-color: #ccc;

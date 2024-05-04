@@ -38,7 +38,7 @@
     <!-- Dialog -->
     <el-dialog
       v-model="dialogTableVisible"
-      title="Order details"
+      title="Chi tiết đơn hàng"
       border
       align="center"
       width="1200"
@@ -50,21 +50,21 @@
         align-center
         finish-status="success"
       >
-        <el-step :active="1" title="Processing" />
-        <el-step title="Processed" />
-        <el-step title="Ordering" />
+        <el-step :active="1" title="Đang xác nhận" />
+        <el-step title="Đã xử lý" />
+        <el-step title="Đang vận chuyển" />
       </el-steps>
       <br />
       <el-table :data="order_details">
-        <el-table-column prop="orderId" label="Order ID" width="120" />
-        <el-table-column prop="productName" label="Product Name" width="120" />
-        <el-table-column prop="productPrice" label="Product Price" width="120">
+        <el-table-column prop="orderId" label="Mã đơn hàng" width="120" />
+        <el-table-column prop="productName" label="Tên sản phẩm" width="120" />
+        <el-table-column prop="productPrice" label="Giá sản phẩm" width="120">
           <template v-slot="scope">
             <p>{{ Number(scope.row.productPrice).toLocaleString() }}đ</p>
           </template>
         </el-table-column>
-        <el-table-column prop="qty" label="Qty" width="120" />
-        <el-table-column prop="productImage" label="Product Image" width="120">
+        <el-table-column prop="qty" label="Số lượng" width="120" />
+        <el-table-column prop="productImage" label="Hình ảnh" width="120">
           <template v-slot="scope">
             <img
               :src="`http://localhost:8085/Files/${scope.row.productImage}`"
@@ -73,9 +73,9 @@
             />
           </template>
         </el-table-column>
-        <el-table-column prop="userName" label="Full name" width="120" />
-        <el-table-column prop="userAddress" label="Address" width="150" />
-        <el-table-column prop="userPhone" label="Phone Number" width="120" />
+        <el-table-column prop="userName" label="Họ tên" width="120" />
+        <el-table-column prop="userAddress" label="Địa chỉ" width="150" />
+        <el-table-column prop="userPhone" label="SDT" width="120" />
       </el-table>
     </el-dialog>
     <div style="text-align: center; font-weight: bold">{{ text }}</div>

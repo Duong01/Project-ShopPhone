@@ -25,7 +25,7 @@
         </div>
         <div class="price" style="border: 2px solid orange">
           <div class="title" style="">
-            <h3 style="color: red" >
+            <h3 style="color: red">
               {{ Number(products.promotionPrice).toLocaleString() }}đ
             </h3>
             <el-badge value="hot" class="item">
@@ -68,9 +68,8 @@
             </div>
           </div>
           <div class="area_order">
-            <router-link :to="{name: 'AddCart',params: {id: products.id}}">
+            <router-link :to="{ name: 'AddCart', params: { id: products.id } }">
               <button
-                
                 style="
                   border-radius: 20px;
                   color: #fff;
@@ -106,7 +105,6 @@
           <p style="margin: 0 10px; font-weight: 100%">
             <span style="width: 100%" v-html="products.des"></span>
           </p>
-          <!-- <button style="font-size: 16px;" class="btn btn-info">Buy Now</button> -->
         </div>
       </li>
     </ul>
@@ -173,14 +171,29 @@
       </div>
     </transition>
   </div>
-  <h3 class="tenKhung" style="margin: 30px 0 0 0;background-image: linear-gradient(120deg, #ff9c00 0%, #ec1f1f 50%, #ff9c00 100%);">* {{$t('CÁC SẢN PHẨM CÙNG TẦM GIÁ')}} *</h3>
-  <ProductDetail1 :price="products.promotionPrice"/>
+  <h3
+    class="tenKhung"
+    style="
+      margin: 30px 0 0 0;
+      background-image: linear-gradient(
+        120deg,
+        #ff9c00 0%,
+        #ec1f1f 50%,
+        #ff9c00 100%
+      );
+    "
+  >
+    * {{ $t("CÁC SẢN PHẨM CÙNG TẦM GIÁ") }} *
+  </h3>
+  <ProductDetail1 :price="products.promotionPrice" />
+  <baohanh/>
 </template>
 
 <script>
 import axios from "axios";
 import { ElMessage } from "element-plus";
-import ProductDetail1 from './ProductDetail1'
+import ProductDetail1 from "./ProductDetail1";
+import baohanh from "@/pages/footer/baohanh.vue";
 export default {
   name: "ProductDetail",
   data() {
@@ -197,13 +210,14 @@ export default {
     };
   },
   components: {
-    ProductDetail1
+    ProductDetail1,
+    baohanh
   },
   created() {
     this.showProduct();
   },
-  mounted(){
-    this.showProduct()
+  mounted() {
+    this.showProduct();
     this.$watch(
       () => this.$route.fullPath,
       () => {
@@ -218,7 +232,7 @@ export default {
       return "";
     },
   },
-  
+
   methods: {
     showProduct() {
       this.$store.state.isLoading = true;
@@ -230,11 +244,11 @@ export default {
           if (res.status == 200) {
             this.$store.state.isLoading = false;
             this.products = res.data;
-            this.price = res.data.promotionPrice
-            this.value = res.data.status
+            this.price = res.data.promotionPrice;
+            this.value = res.data.status;
           }
         })
-        .catch(() =>{})
+        .catch(() => {});
     },
     addcart(item) {
       axios
@@ -272,16 +286,46 @@ export default {
 </script>
 
 <style scoped>
-h3{
+.tintuc-info {
+  height: 170px;
+  border-bottom: 1px solid #fcf;
+  margin-top: 5px;
+}
+.tintuc-info img {
+  border: 1px solid gray;
+  float: left;
+  margin-right: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  height: 50px;
+  width: 50px;
+}
+a{
+  text-decoration: none;
+  color: #000;
+}
+.tintuc-info a:hover {
+  color: #666;
+}
+.tintuc-info h5 {
+  font-weight: 100;
+  font-style: italic;
+  color: #ccc;
+}
+.bordered-element {
+  border: 1px solid #000; /* Định dạng đường viền */
+  padding: 10px; /* Để tạo khoảng cách giữa nội dung và đường viền */
+}
+h3 {
   display: block;
-    line-height: 1.5em;
-    font-size: 1.5em;
-    text-align: center;
-    margin: 0 auto;
-    border-radius: 1em;
-    color: white;
-    transform: translateY(-0.75em);
-    margin: 20px 0  0  0;
+  line-height: 1.5em;
+  font-size: 1.5em;
+  text-align: center;
+  margin: 0 auto;
+  border-radius: 1em;
+  color: white;
+  transform: translateY(-0.75em);
+  margin: 20px 0 0 0;
 }
 li {
   display: block;

@@ -1,5 +1,5 @@
 <template>
-   <div class="container" v-loading="this.$store.state.isLoading">
+  <div class="container" v-loading="this.$store.state.isLoading">
   <div class="row">
     <div
       class="col-md-3 mb-4"
@@ -8,18 +8,19 @@
     >
       <div class="card">
         <router-link :to="{ name: 'ProductDetail', params: { id: item.id } }">
-          <el-badge value="hot" class="item" style="font-size: 20px">
+          <el-badge value="hot" class="item" style="font-size:20px">
             <div class="imgBx">
               <img
                 class="card-img-top"
                 :src="`http://localhost:8085/Files/${item.image}`"
                 alt="Product Image"
+                
               />
             </div>
           </el-badge>
           <div class="card-body">
             <div class="productName">
-              <a style="font-size: 14px" class="card-title">
+              <a style="font-size: 14px;" class="card-title">
                 <b>{{ item.name }}</b></a
               >
             </div>
@@ -51,54 +52,35 @@
       </div>
     </div>
   </div>
-  <router-link class="xemTatCa" :to="{name: 'AllProduct', params: {}}" >
-    Xem thêm
-  </router-link>
-</div>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
-import { ElMessage } from "element-plus";
+
 export default {
-  name: "BigSaleOff",
+  name: 'TestPage',
   data() {
     return {
-      products: [],
-      productForm: [],
-      value: 4.5,
-      display: false,
-      num: 1,
-      radio: "",
-      dialogVisible: false,
-      state: "",
+      userInput: "",
+      messages: [],
     };
   },
   created() {
     this.getAll();
   },
-  filters: {
-    toUSD(value) {
-      return `$${value.toLocaleString()}`;
-    },
-  },
-  computed: {
-    getEmpInfor() {
-      let emp = JSON.parse(localStorage["us"]);
-      if (emp != undefined) return emp.id;
-      return "";
-    },
-    show() {
-      return localStorage.getItem("us") != undefined;
-    },
-  },
   methods: {
     getAll() {
       axios
-        .get("http://localhost:8181/api/products/listproducthot?status=4")
+        .get("http://localhost:8181/api/products/listproduct")
         .then((res) => {
           if (res.data != null) {
-            this.products = res.data.slice(0, 8);
+            const filteredProducts = res.data.filter(product => {
+              const productId = parseInt(product.id);
+              return productId < 91 || productId > 139;
+            });
+            const randomProducts = this.shuffleArray(filteredProducts).slice(0, 20);
+            this.products = randomProducts;
             this.$store.state.isLoading = false;
           } else {
             res.data = "Không có sản phẩm nào";
@@ -106,54 +88,14 @@ export default {
         });
       this.$store.state.isLoading = true;
     },
-    handSelect() {},
-    querySearchAsync() {
-      this.getAll();
-    },
-    Show(item) {
-      this.productForm = [item.data];
-      this.display = true;
-    },
-    addcart(item) {
-      if (this.show) {
-        axios
-          .post(`http://localhost:8181/api/cart/insertcart`, {
-            userId: this.getEmpInfor,
-            productId: item.id,
-            qty: this.num,
-            productName: item.name,
-            productPrice: item.promotionPrice,
-            productImage: item.image,
-            color: this.radio
-          })
-          .then((res) => {
-            if (res.data == "ok" && res.status == 200) {
-              ElMessage({
-                message: "Add cart success.",
-                grouping: true,
-                type: "success",
-              });
-            }
-          });
-        this.dialogVisible = false;
-        this.wrapperVisible = false;
-      } else {
-        ElMessage.error("You are not loggin");
+    shuffleArray(array) {
+      // Phương thức để xáo trộn mảng
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
       }
-    },
-    showfrom() {
-      document.getElementById("form").style.display = "block";
-    },
-    close() {
-      document.getElementById("form").style.display = "none";
-    },
-    openDialog(item) {
-      this.productForm = item;
-      this.dialogVisible = true;
-    },
-    closeDialog() {
-      this.dialogVisible = false;
-    },
+      return array;
+    }
   },
 };
 </script>
@@ -169,10 +111,10 @@ export default {
     border-radius: 1em;
     color: #888;
     background-color: #eee;
-    justify-content: center;
-
     transition-duration: .2s;
     transform: translateY(1em);
+    border-left: 2px solid #42bcf4;
+    border-right: 2px solid #42bcf4;
 }
 .xemTatCa:hover {
     background-color: #ccc;
@@ -209,7 +151,7 @@ li a {
 }
 
 .container .card {
-  width: 100%;
+  width: 95%;
   background: #fff;
   border-radius: 10px;
   box-shadow: 2px 2px 2px gray;
@@ -341,110 +283,5 @@ button.add-cart {
   height: 40px;
   border-radius: 40px;
   float: right;
-}
-.dialog-wrapper {
-  position: fixed;
-  z-index: 1000;
-  top: 0px;
-  right: 0px;
-  bottom: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-.dialog {
-  position: absolute;
-  width: 800px;
-  /* height: calc(100% - 130px); */
-  z-index: 1001;
-  background-color: #fff;
-  top: 200px;
-  left: calc(50% - 367.5px);
-  border-radius: 6px;
-  border: 1px solid #dbdbdb;
-}
-.dialog-body {
-  margin: 30px 0px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.dialog-body .img {
-  width: 300px;
-  height: 300px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-}
-.dialog-body .img img {
-  width: 100%;
-  height: 100%;
-}
-.dialog.newsitem {
-  height: 120px;
-  line-height: 120px;
-  text-align: center;
-}
-.el-icon-close {
-  cursor: pointer;
-}
-.el-icon-close:hover {
-  color: red;
-  scale: 25px;
-}
-.scale-enter-active {
-  -webkit-animation: scale-in-tr 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-  animation: scale-in-tr 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-}
-.scale-leave-active {
-  -webkit-animation: scale-out-tr 0.5s cubic-bezier(0.35, 0.385, 0.58, 0.83)
-    both;
-  animation: scale-out-tr 0.5s cubic-bezier(0.35, 0.385, 0.58, 0.83) both;
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-/* @keyframes scale-in-tr {
-  0% {
-    -webkit-transform: scale(0);
-    transform: scale(0);
-    -webkit-transform-origin: 100% 0;
-    transform-origin: 100% 0;
-    opacity: 1;
-    position: absolute;
-    top: 36px;
-    left: calc(100% - 82px - 1155px);
-  }
-  100% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-    -webkit-transform-origin: 100% 0;
-    transform-origin: 100% 0;
-    opacity: 1;
-    position: absolute;
-    top: 100px;
-    left: calc(50% - 577.5px);
-  }
-} */
-@keyframes scale-out-tr {
-  0% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-    -webkit-transform-origin: 100% 0;
-    transform-origin: 100% 0;
-    opacity: 1;
-    position: absolute;
-    top: 100px;
-    left: calc(50% - 577.5px);
-  }
-  100% {
-    -webkit-transform: scale(0);
-    transform: scale(0);
-    -webkit-transform-origin: 100% 0;
-    transform-origin: 100% 0;
-    opacity: 1;
-    position: absolute;
-    top: 36px;
-    left: calc(100% - 82px - 1155px);
-  }
 }
 </style>

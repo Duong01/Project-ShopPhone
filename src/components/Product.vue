@@ -1,7 +1,8 @@
 <template>
-  <div class="box">
-    
-      <el-container>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2">
+        <el-container>
         <el-aside :width="leftSideBarWidth" class="left-menu">
           <el-menu
             router
@@ -50,9 +51,10 @@
           </el-menu>
         </el-aside>
       </el-container>
-    
-    <div class="box-right">
-      <router-view />
+      </div>
+      <div class="col-md-10" >
+        <router-view />
+      </div>
     </div>
   </div>
 </template>
@@ -71,36 +73,17 @@ export default {
   methods: {
     ToggleLeftSide() {
       this.isCollapse = !this.isCollapse;
-      if (this.isCollapse) this.leftSideBarWidth = "64px";
-      else this.leftSideBarWidth = "250px";
+      if (this.isCollapse){
+       this.leftSideBarWidth = "64px";
+
+      }  
+      else{
+        this.leftSideBarWidth = "250px";
+       } 
     },
   },
 };
 </script>
 <style scoped>
-.box {
-  display: flex;
-  width: 100%;
-}
-.box-left {
-  width: 256px;
-  min-height: 400px;
-  padding-top: 50px;
-  border-right: #e6e6e6 solid 1px;
-  background: #f5f5f5;
-}
-.el-menu {
-  height: 100%;
-  border-right: none;
-}
 
-.el-menu-item.is-active {
-  background-color: rgba(#1890ff, 0.1) !important;
-  border-right: solid #1890ff 3px;
-}
-
-.box-right {
-  width: 100%;
-  /* padding: 47px 0 0 22px; */
-}
 </style>
