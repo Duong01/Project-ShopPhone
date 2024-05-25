@@ -14,10 +14,6 @@
         + Làm trang register
         + Tạo bản đồ
         + Chức năng thanh toán    => Done
-    * Trang Admin
-        + Chức năng in hóa đơn
-        + Cải thiện lại các chức năng Thêm, Sửa, Xóa
-        + Biểu đồ thống kê
 
 - Các localhost 
     + Trang user: 8082
