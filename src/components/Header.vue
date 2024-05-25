@@ -49,7 +49,7 @@
             <el-menu-item @click="ChangeLang1('en-US')" index=""
               >English</el-menu-item
             >
-            <el-menu-item index="">中国</el-menu-item>
+            <el-menu-item @click="ChangeLang1('zh-CN')" index="">中国</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="2" v-if="show" >
             <template #title
@@ -187,6 +187,7 @@
 <script>
 import vi from "element-plus/dist/locale/vi.mjs";
 import en from "element-plus/dist/locale/en.mjs";
+import zh from "element-plus/dist/locale/zh-cn.mjs";
 import { setLanguage, getLanguage } from "@/utils/cookies";
 import { ElMessage } from "element-plus";
 
@@ -300,6 +301,9 @@ export default {
           break;
         case "vi-VN":
           this.curElLang = vi;
+          break;
+        case "zh-CN":
+          this.curElLang = zh;
           break;
         default:
           this.curElLang = vi;

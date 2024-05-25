@@ -1,6 +1,5 @@
 <template>
   <div class="body-lienhe">
-    <div class="lienhe-header">Liên hệ</div>
     <div class="lienhe-info">
       <div class="info-left">
           <h2 style="color: gray"> CÔNG TY TNHH SMARTPHONE STORE </h2><br />
@@ -98,9 +97,7 @@ export default {
     return {
       thongtin: [
         { name: "Nguyễn Văn Dương", msv: "0356076205", gender: "Nam", cv: "%" },
-        { name: "Nguyễn Hữu Đức", msv: "0356076205", gender: "Nam", cv: "%" },
-        { name: "Ngô Trung Hiếu", msv: "0356076205", gender: "Nam", cv: "%" },
-        { name: "Nguyễn Văn Vũ", msv: "0356076205", gender: "Nam", cv: "%" }
+        
       ]
     }
   }

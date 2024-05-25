@@ -15,8 +15,10 @@
         <tr v-for="(item, index) in order" :key="index">
           <td>{{ index + 1 }}</td>
           <td>{{ item.id }}</td>
-          <td>{{ calculateDelivery(item.createDate) }}</td>
-          <td>Dự kiến giao hàng {{ calculateDeliveryDate(item.createDate) }}</td>
+          <td>{{ formatDate(item.createDate) }}</td>
+          <td>
+            Dự kiến giao hàng {{ calculateDeliveryDate(item.createDate) }}
+          </td>
           <td>{{ item.status }}</td>
           <td>
             <button
@@ -57,6 +59,7 @@
       <br />
       <el-table :data="order_details">
         <el-table-column prop="orderId" label="Mã đơn hàng" width="120" />
+        <el-table-column prop="productId" label="Mã sản phẩm" width="120" />
         <el-table-column prop="productName" label="Tên sản phẩm" width="120" />
         <el-table-column prop="productPrice" label="Giá sản phẩm" width="120">
           <template v-slot="scope">
@@ -106,14 +109,23 @@ export default {
       if (emp != undefined) return emp.id;
       return "";
     },
-    
   },
   methods: {
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    },
     // Date Time
-    calculateDeliveryDate(createDate) {
-      const deliveryDate = new Date(createDate); // Tạo một đối tượng ngày từ ngày đặt hàng
-      deliveryDate.setDate(deliveryDate.getDate() + 3); // Thêm 3 ngày vào ngày đặt hàng
-      return deliveryDate.toISOString().slice(0, 10); // Trả về ngày giao hàng dự kiến dưới dạng YYYY-MM-DD
+    calculateDeliveryDate(dateString) {
+      const date = new Date(dateString);
+      date.setDate(date.getDate() + 3); // Cộng thêm 3 ngày
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
     },
     calculateDelivery(createDate) {
       const deliveryDate = new Date(createDate); // Tạo một đối tượng ngày từ ngày đặt hàng
@@ -131,7 +143,7 @@ export default {
 
             this.$store.state.isLoading = false;
           }
-          if (this.order == '') {
+          if (this.order == "") {
             this.text = "Không có đơn hàng nào cần sử lý";
           }
         });
@@ -149,17 +161,16 @@ export default {
           type: "warning",
         }
       )
-      
-        .then(() => {
-          axios.delete(`http://localhost:8181/api/orderdetail/deleteorderdetail?orderId=${item.id}`)
-            .then(() => {
-              
-              
-            })
-            .catch(() => {
 
-            });
-          axios.delete(`http://localhost:8181/api/order/deleteorder?id=${item.id}`)
+        .then(() => {
+          axios
+            .delete(
+              `http://localhost:8181/api/orderdetail/deleteorderdetail?orderId=${item.id}`
+            )
+            .then(() => {})
+            .catch(() => {});
+          axios
+            .delete(`http://localhost:8181/api/order/deleteorder?id=${item.id}`)
             .then((res) => {
               if (res.data == true && res.status == 200) {
                 ElMessage({
@@ -206,9 +217,6 @@ export default {
       }
       if (item.status == "Ordering") {
         this.active = 3;
-      }
-      if (item.status == "Success") {
-        this.active = 4;
       }
     },
   },

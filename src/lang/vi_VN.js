@@ -21,6 +21,13 @@ export default
         'Tổng tiền': 'Tổng tiền',
         'Tìm kiếm': 'Tìm kiếm',
         'Ngôn ngữ': 'Ngôn ngữ',
+        'Đăng nhập': 'Đăng nhập',
+        'Đăng ký': 'Đăng ký',
+        'Nhập thông tin tài khoản': 'Nhập thông tin tài khoản',
+        'Quên mật khẩu?': 'Quên mật khẩu?',
+        'Đăng ký để làm thành viên của Trang web bán hàng. Bạn sẽ được một số quyền lợi nhất định khi làm thành viên của Chúng tôi.': 'Đăng ký để làm thành viên của Trang web bán hàng. Bạn sẽ được một số quyền lợi nhất định khi làm thành viên của Chúng tôi.',
+        'Tạo tài khoản': 'Tạo tài khoản',
+        'Nếu bạn đã có Tài khoản, xin mời Đăng nhập': 'Nếu bạn đã có Tài khoản, xin mời Đăng nhập',
 
         'NỔI BẬT NHẤT': 'NỔI BẬT NHẤT',
         'SẢN PHẨM MỚI': 'SẢN PHẨM MỚI',

@@ -10,12 +10,12 @@
                 label-width="auto"
                 style="max-width: 600px"
               >
-                <h1>Đăng ký</h1>
-                <p class="text-muted">Tạo tài khoản</p>
+                <h1>{{$t('Đăng ký')}}</h1>
+                <p class="text-muted">{{$t('Tạo tài khoản')}}</p>
                 <div class="input-group mb-3">
                   <el-form-item label="Email">
                     <el-input
-                      style="width: 400px"
+                      style="width: 350px"
                       placeholder="Email"
                       v-model="email"
                       clearable
@@ -25,7 +25,7 @@
                 <div class="input-group mb-3">
                   <el-form-item label="Password">
                     <el-input
-                      style="width: 400px"
+                      style="width: 350px"
                       placeholder="Password"
                       type="password"
                       v-model="password"
@@ -36,7 +36,7 @@
                 <div class="input-group mb-3">
                   <el-form-item label="Full name">
                     <el-input
-                      style="width: 400px"
+                      style="width: 350px"
                       placeholder="Full name"
                       v-model="fullname"
                       clearable
@@ -48,7 +48,7 @@
                     <el-select
                       v-model="sex"
                       placeholder="Please select your gender"
-                      style="width: 400px"
+                      style="width: 350px"
                     >
                       <el-option label="Nam" value="Nam" />
                       <el-option label="Nữ" value="Nữ" />
@@ -103,7 +103,7 @@
                     <el-input
                       v-if="selectedWardId"
                       v-model="street"
-                      style="width: 400px"
+                      style="width: 350px"
                       clearable
                       placeholder="Street name, house number"
                     />
@@ -116,7 +116,7 @@
                   >
                     <el-form-item label=" ">
                       <el-input
-                        style="width: 400px"
+                        style="width: 350px"
                         readonly
                         :value="
                           selectedWard.Name +
@@ -134,7 +134,7 @@
                     <el-col :span="11">
                       <el-date-picker
                         v-model="dob"
-                        style="width: 400px"
+                        style="width: 350px"
                         type="date"
                         placeholder="Date of birth"
                       />
@@ -144,7 +144,7 @@
                 <div class="input-group mb-3">
                   <el-form-item label="Phone">
                     <el-input
-                      style="width: 400px"
+                      style="width: 350px"
                       placeholder="Phone number"
                       v-model="phone"
                       clearable
@@ -157,19 +157,19 @@
                   name="btnDangKy"
                   type="button"
                 >
-                  Tạo tài khoản
+                  {{$t('Tạo tài khoản')}}
                 </button>
               </el-form>
             </div>
             <div class="card-footer p-4">
               <div class="row">
                 <div class="col-12">
-                  <center>Nếu bạn đã có Tài khoản, xin mời Đăng nhập</center>
+                  <center>{{$t('Nếu bạn đã có Tài khoản, xin mời Đăng nhập')}}</center>
                   <router-link
                     :to="{ name: 'login', params: {} }"
                     class="btn btn-primary form-control"
                   >
-                    Đăng nhập</router-link
+                    {{$t('Đăng nhập')}}</router-link
                   >
                 </div>
               </div>
@@ -427,9 +427,9 @@ export default {
   transform: translate(-50%, -50%);
 }
 .el-input__wrapper {
-  width: 400px;
+  width: 350px;
 }
 .el-select__wrapper {
-  width: 400px;
+  width: 350px;
 }
 </style>

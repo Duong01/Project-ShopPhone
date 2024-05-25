@@ -4,6 +4,17 @@
       <div class="content-left">
         <div class="box">
           <div class="box-title">Mô tả trang web</div>
+
+          <div class="box-item">
+            <router-link :to="{ name: 'LienHe', params: {} }">
+              Liên hệ
+            </router-link>
+          </div>
+          <div class="box-item">
+            <router-link :to="{ name: 'BaoHanh', params: {} }">
+              Bảo hành
+            </router-link>
+          </div>
           <div class="box-item">
             <router-link :to="{ name: 'TinTuc', params: {} }">
               Tin tức
@@ -17,16 +28,6 @@
           <div class="box-item">
             <router-link :to="{ name: 'GioiThieu', params: {} }">
               Giới thiệu
-            </router-link>
-          </div>
-          <div class="box-item">
-            <router-link :to="{ name: 'BaoHanh', params: {} }">
-              Bảo hành
-            </router-link>
-          </div>
-          <div class="box-item">
-            <router-link :to="{ name: 'LienHe', params: {} }">
-              Liên hệ
             </router-link>
           </div>
         </div>

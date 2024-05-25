@@ -5,9 +5,11 @@ import { getLanguage } from '@/utils/cookies'
 // vue-i18n 
 import vi from 'element-plus/dist/locale/vi.mjs'
 import en from 'element-plus/dist/locale/en.mjs'
+import zh from 'element-plus/dist/locale/zh-cn.mjs'
 // User defined lang
 import en_US from './en_US'
 import vi_VN from './vi_VN'
+import zh_CN from './zh_CN'
 
 
 const messages = {
@@ -18,6 +20,10 @@ const messages = {
   'vi-VN': {
     ...vi,
     ...vi_VN
+  },
+  'zh-CN': {
+    ...zh,
+    ...zh_CN
   }
 }
 

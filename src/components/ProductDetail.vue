@@ -104,7 +104,10 @@
           <hr />
           <p style="margin: 0 10px; font-weight: 100%">
             <span style="width: 100%" v-html="products.des"></span>
+            <br>
           </p>
+          <hr>
+            <p style="color:#f59000"> Lưu ý: Khách hàng mua hàng kiểm tra hàng trước khi thanh toán</p>
         </div>
       </li>
     </ul>

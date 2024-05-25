@@ -18,8 +18,8 @@
                   </template>
                 </el-page-header>
                 <div class="card-body">
-                  <h1>Đăng nhập</h1>
-                  <p class="text-muted">Nhập thông tin Tài khoản</p>
+                  <h1>{{$t('Đăng nhập')}}</h1>
+                  <p class="text-muted">{{$t('Nhập thông tin tài khoản')}}</p>
                   <div class="input-group mb-3">
                     <input
                       class="form-control"
@@ -42,12 +42,6 @@
                     />
                   </div>
                   <div class="input-group mb-5">
-                    <!-- <div class="captcha">
-                      <span v-if="captcha" class="captcha-text">{{ captcha }}</span>
-                      <button @click="generateCaptcha" class="generate-button">
-                        Generate New CAPTCHA
-                      </button>
-                    </div> -->
                     <div class="verification">
                       <input
                         class="input-field"
@@ -65,19 +59,9 @@
                           src="../../assets/recapcha.png"
                           alt=""
                         />
-                        <!-- <button
-                          type="button"
-                          
-                          
-                        >
-                          Generate New CAPTCHA
-                        </button> -->
                       </div>
-                      <!-- <button @click="verifyCaptcha" class="verify-button">
-                        Verify
-                      </button> -->
                     </div>
-                    <span
+                    <span 
                       v-if="verificationResult !== null"
                       class="verification-message"
                       >{{ verificationResult }}</span
@@ -86,7 +70,7 @@
                   <div class="row">
                     <div class="col-6">
                       <button class="btn btn-primary px-4" name="btnDangNhap">
-                        Đăng nhập
+                        {{$t('Đăng nhập')}}
                       </button>
                     </div>
                     <div class="col-6 text-right">
@@ -98,7 +82,7 @@
                       >
                       <template #reference>
                         <button class="btn btn-link px-0" type="button">
-                          Quên mật khẩu?
+                          {{$t('Quên mật khẩu?')}}
                         </button>
                         </template>
                       </el-popover>
@@ -113,17 +97,15 @@
               >
                 <div class="card-body text-center">
                   <div>
-                    <h2>Đăng ký</h2>
+                    <h2>{{$t('Đăng ký')}}</h2>
                     <p>
-                      Đăng ký để làm thành viên của Trang web bán hàng. Bạn sẽ
-                      được một số quyền lợi nhất định khi làm thành viên của
-                      Chúng tôi.
+                      {{$t('Đăng ký để làm thành viên của Trang web bán hàng. Bạn sẽ được một số quyền lợi nhất định khi làm thành viên của Chúng tôi.')}}
                     </p>
                     <router-link
                       :to="{ name: 'register', params: {} }"
                       class="btn btn-primary active mt-3"
                     >
-                      Đăng ký</router-link
+                      {{$t('Đăng ký')}}</router-link
                     >
                   </div>
                 </div>
@@ -272,10 +254,11 @@ export default {
 }
 
 .captcha-text {
-  font-size: 24px;
+  font-size: 18px;
+  text-align: center;
   font-weight: bold;
   float: left;
-  margin: 0 10px;
+  margin: 8px 10px;
 }
 
 .generate-button {

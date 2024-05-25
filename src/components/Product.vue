@@ -34,7 +34,7 @@
               <el-menu-item index="/product/oppo">{{$t("Điện thoại Oppo")}}</el-menu-item>
               <el-menu-item index="/product/xiaomi">{{$t("Điện thoại Xiaomi")}}</el-menu-item>
             </el-sub-menu>
-            <el-sub-menu index="2" class="el-sub-menu">
+            <!-- <el-sub-menu index="2" class="el-sub-menu">
               <template #title>
                 <el-icon><Headset /></el-icon>
                 <span>{{ $t("Phụ kiện điện thoại") }}</span>
@@ -47,7 +47,7 @@
               <el-menu-item index="/product/stand">{{$t("Giá đỡ điện thoại/laptop")}}</el-menu-item>
               <el-menu-item index="/product/hook">{{$t("Đế, móc điện thoại")}}</el-menu-item>
               <el-menu-item index="/product/waterproof">{{$t("Túi chống nước")}}</el-menu-item>
-            </el-sub-menu>
+            </el-sub-menu> -->
           </el-menu>
         </el-aside>
       </el-container>

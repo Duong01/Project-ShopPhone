@@ -38,7 +38,7 @@
     <div class="qc">
       <img src="../assets/img/blackFriday.gif" alt="" />
     </div>
-    
+
     <section>
       <div class="container">
         <div class="quick-sales">

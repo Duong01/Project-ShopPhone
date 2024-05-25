@@ -6,6 +6,14 @@ export default
         'Đơn hàng': 'Order',
         'Giỏ hàng': 'Cart',
         'Mail': 'Mail',
+        'Đăng nhập': 'Login',
+        'Đăng ký': 'Register',
+        'Nhập thông tin tài khoản': 'Enter account information',
+        'Quên mật khẩu?': 'Forgot password',
+        'Đăng ký để làm thành viên của Trang web bán hàng. Bạn sẽ được một số quyền lợi nhất định khi làm thành viên của Chúng tôi.': 'Register to become a member of the Sales Site. You will receive certain benefits when you become our member.',
+        'Tạo tài khoản': 'Create Account',
+        'Nếu bạn đã có Tài khoản, xin mời Đăng nhập': 'If you already have an Account, please Login',
+
         'Chờ xác nhận': 'Wait for confirmation',
         'Chờ lấy hàng': 'Waiting for delivery',
         'Chờ vận chuyển': 'Waiting for shipping',
@@ -54,6 +62,4 @@ export default
         'Đế, móc điện thoại': 'Phone stand and hook',
         'Túi chống nước': 'Waterproof bag'
 
-
-    
     }
