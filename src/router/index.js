@@ -29,6 +29,7 @@ const Waterproof = () => import('@/pages/categories/PhoneAaccessories/Waterproof
 // Cart
 const Cart = () => import('@/pages/cart/Cart')
 const Thanhtoan = () => import('@/pages/cart/Thanhtoan')
+const VNPayReturn = () => import('@/pages/cart/VNPayReturn')
 
 
 // Order
@@ -167,6 +168,12 @@ const routes = [
       path: '/thanhtoan',
       name: 'Thanhtoan',
       component: Thanhtoan,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/vnpay_return',
+      name: 'VNPayReturn',
+      component: VNPayReturn,
       meta: { requiresAuth: true }
     },
     {

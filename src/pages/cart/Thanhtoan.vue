@@ -181,9 +181,11 @@
                 v-model="radio"
                 class="custom-control-input"
                 required=""
-                value="Ship COD"
+                value="VNPay"
               />
-              <label class="custom-control-label" for="httt-3">Ship COD</label>
+              <label class="custom-control-label" for="httt-3"
+                >Thanh toán qua VNPay</label
+              >
             </div>
           </div>
           <p style="color: #f59000">
@@ -346,6 +348,7 @@
 <script>
 import { ElMessage } from "element-plus";
 import axios from "axios";
+// import CryptoJS from "crypto-js";
 export default {
   name: "ThanhToan",
   data() {
@@ -363,6 +366,11 @@ export default {
       dob: "",
       openDialog: false,
       randomContent: "",
+      amount: 0,
+      vnp_TmnCode: "0DGUIXO7",
+      vnp_HashSecret: "4FL4T8T37HLVFMAMB38ZCOPBH8CHR3MZ",
+      vnp_Url: "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html",
+      vnp_ReturnUrl: "http://localhost:8080/vnpay_return",
     };
   },
   created() {
@@ -370,7 +378,7 @@ export default {
       this.getCart(),
       this.getNow(),
       (this.randomContent = this.generateRandomContent());
-      
+    this.generateOrderId();
   },
   methods: {
     getAll() {
@@ -404,17 +412,7 @@ export default {
       const year = date.getFullYear();
       return `${day}/${month}/${year}`;
     },
-    generateRandomContent() {
-      const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-      let result = "";
-      const charactersLength = characters.length;
-      for (let i = 0; i < 6; i++) {
-        result += characters.charAt(
-          Math.floor(Math.random() * charactersLength)
-        );
-      }
-      return result;
-    },
+
     copyToClipboard() {
       ElMessage({
         message: "Sao chép thành công",
@@ -488,7 +486,63 @@ export default {
         `http://localhost:8181/api/cart/deleteallcart?userId=${this.getEmpInfor}`
       );
     },
-    buy() {
+    VNPay() {
+      for (let i = 0; i < this.count; i++) {
+        axios
+          .post(`http://localhost:8181/api/order/inserorder`, {
+            produuctName: this.cart[i].productName,
+            userId: this.cart[i].userId,
+            createDate: this.timenow,
+            receivedDate: this.timenow,
+            qty: this.cart[i].qty,
+            price: this.cart[i].productPrice * this.cart[i].qty,
+            status: "Processing",
+          })
+          .then((res) => {
+            console.log(res);
+            this.idOrder = res.data.id;
+            // axios.put(`http://localhost:8181/api/products/updateqtyproduct`,{
+            //   id: this.cart[i].productId,
+            //   soldCount:  this.cart[i].qty
+            // })
+            axios
+              .post(`http://localhost:8181/api/orderdetail/insertorderdetail`, {
+                orderId: this.idOrder,
+                productId: this.cart[i].productId,
+                qty: this.cart[i].qty,
+                productPrice: this.cart[i].productPrice,
+                productName: this.cart[i].productName,
+                productImage: this.cart[i].productImage,
+                userName: this.user.fullname,
+                userAddress: this.user.address,
+                userPhone: this.user.phone,
+                userEmail: this.user.email,
+              })
+              .then((res) => {
+                if (res.data == "ok" && res.status == 200) {
+                  ElMessage({
+                    type: "success",
+                    message: "Confirm successful payment",
+                  });
+                  window.location.href = "/order";
+                }
+              })
+              .catch(() => {
+                ElMessage({
+                  type: "error",
+                  message: "Order error",
+                });
+              });
+          });
+      }
+      axios.delete(
+        `http://localhost:8181/api/cart/deleteallcart?userId=${this.getEmpInfor}`
+      );
+    },
+    generateOrderId() {
+      return Math.floor(Math.random() * 100000000); // Tạo mã đơn hàng ngẫu nhiên với 4 chữ số
+    },
+    async buy() {
       if (this.radio == "") {
         ElMessage({
           message: "Check status salary.",
@@ -498,6 +552,16 @@ export default {
       } else {
         if (this.radio == "Chuyển khoản") {
           this.openDialog = true;
+        } else if (this.radio == "VNPay") {
+          await axios
+            .post("http://localhost:8888/order/create_payment_url", {
+              amount: this.cartTotal,
+              orderId: this.generateOrderId(),
+            })
+            .then((response) => {
+              this.paymentUrl = response.data.paymentUrl;
+              window.location.href = this.paymentUrl; // Redirect to payment URL
+            });
         } else {
           for (let i = 0; i < this.count; i++) {
             axios
@@ -556,6 +620,18 @@ export default {
         }
       }
     },
+
+    generateRandomContent() {
+      const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let result = "";
+      const charactersLength = characters.length;
+      for (let i = 0; i < 6; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      return result;
+    },
   },
   computed: {
     getEmpInfor() {
@@ -572,7 +648,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .full-screen-dialog .el-dialog__wrapper {
   height: 100%;
   margin: 0;
