@@ -18,12 +18,12 @@
       </a>
     </div>
     
-    <df-messenger
+    /*<df-messenger
       intent="WELCOME"
       chat-title="SmartPhoneStore"
       agent-id="3274f91e-3826-43e2-b658-a13ff7225def"
       language-code="vi"
-    ></df-messenger>
+    ></df-messenger>*/
   </div>
 </template>
 
