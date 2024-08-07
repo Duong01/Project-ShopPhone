@@ -12,12 +12,6 @@
       </el-footer>
     </el-container>
     <el-backtop :bottom="100" :right="100" />
-    <iframe
-     src="https://udify.app/chatbot/9IsiXNeXEJXr2fGS"
-     style="width: 100%; height: 100%; min-height: 700px"
-     frameborder="0"
-     allow="microphone">
-    </iframe>
     <div class="zalo-contact" v-show="showZaloButton">
       <a href="https://zalo.me/0356076205" target="_blank" class="zalo-button">
         <img src="../assets/Logo.svg" alt="Zalo" class="zalo-icon" />
