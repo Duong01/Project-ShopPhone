@@ -48,8 +48,7 @@ export default {
     window.addEventListener("scroll", this.handleScroll);
   },
   mounted() {
-    // Play the music when the component is mounted
-    this.$refs.backgroundMusic.play();
+    this.playMusic();
   },
   unmounted() {
     window.removeEventListener("scroll", this.handleScroll);
@@ -59,6 +58,23 @@ export default {
       // Khi cuộn trang, kiểm tra vị trí cuộn
       this.showZaloButton = true;
     },
+    playMusic() {
+      const audio = this.$refs.backgroundMusic;
+      audio.play().catch(() => {
+        // Fallback for browsers that block autoplay
+        document.addEventListener('click', this.enableAudioPlayback);
+      });
+    },
+    enableAudioPlayback() {
+      const audio = this.$refs.backgroundMusic;
+      audio.play();
+      document.removeEventListener('click', this.enableAudioPlayback); // Remove listener once the music is playing
+    },
+  },
+  beforeUnmount() {
+    if (this.$refs.backgroundMusic) {
+      this.$refs.backgroundMusic.pause();
+    }
   },
 };
 </script>
