@@ -46,9 +46,10 @@ export default {
   },
   created() {
     window.addEventListener("scroll", this.handleScroll);
+    this.playMusic();
   },
   mounted() {
-    this.playMusic();
+    // this.playMusic();
   },
   unmounted() {
     window.removeEventListener("scroll", this.handleScroll);
