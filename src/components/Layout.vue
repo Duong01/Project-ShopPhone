@@ -17,7 +17,8 @@
         <img src="../assets/Logo.svg" alt="Zalo" class="zalo-icon" />
       </a>
     </div>
-    
+    <audio ref="backgroundMusic" :src="musicSrc" autoplay loop></audio>
+
     <!--<df-messenger
       intent="WELCOME"
       chat-title="SmartPhoneStore"
@@ -40,10 +41,15 @@ export default {
   data() {
     return {
       showZaloButton: true,
+       musicSrc: require("../assets/music.mp3")
     };
   },
   created() {
     window.addEventListener("scroll", this.handleScroll);
+  },
+  mounted() {
+    // Play the music when the component is mounted
+    this.$refs.backgroundMusic.play();
   },
   unmounted() {
     window.removeEventListener("scroll", this.handleScroll);
