@@ -27,6 +27,7 @@
   </div>
 </template>
 
+<!--Start of Fchat.vn--><script type="text/javascript" src="https://cdn.fchat.vn/assets/embed/webchat.js?id=66b59424982e0723d0208b56" async="async"></script><!--End of Fchat.vn-->
 <script>
 import Header from "./Header.vue";
 import Footer from "./Footer.vue";
