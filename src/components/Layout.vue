@@ -17,7 +17,7 @@
         <img src="../assets/Logo.svg" alt="Zalo" class="zalo-icon" />
       </a>
     </div>
-    <!--<audio ref="backgroundMusic" :src="musicSrc" autoplay loop></audio>
+    <!--<audio ref="backgroundMusic" :src="musicSrc" autoplay loop></audio>-->
 
     <!--<df-messenger
       intent="WELCOME"
