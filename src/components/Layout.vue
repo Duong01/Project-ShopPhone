@@ -17,14 +17,14 @@
         <img src="../assets/Logo.svg" alt="Zalo" class="zalo-icon" />
       </a>
     </div>
-    <!--<audio ref="backgroundMusic" :src="musicSrc" autoplay loop></audio>
 
-    <df-messenger
+    <!--<df-messenger
       intent="WELCOME"
       chat-title="SmartPhoneStore"
-      agent-id="3274f91e-3826-43e2-b658-a13ff7225def" -->
+      agent-id="3274f91e-3826-43e2-b658-a13ff7225def"
       language-code="vi"
     ></df-messenger> -->
+    <iframe src="https://archive.org/embed/the-looney-tunes-show-season-2-of-2-mkv" width="640" height="480" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
   </div>
 </template>
 
@@ -41,7 +41,6 @@ export default {
   data() {
     return {
       showZaloButton: true,
-       musicSrc: require("../assets/music.mp3")
     };
   },
   created() {
